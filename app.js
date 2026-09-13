@@ -4,12 +4,14 @@ const API = "/api";
    GLOBAL INITIALIZATION
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
-    setupNavigation();
-    setupEmergencyPage();
-    setupEmergencyForm();
-    setupDashboard();
-});
+if (typeof document !== "undefined") {
+    document.addEventListener("DOMContentLoaded", () => {
+        setupNavigation();
+        setupEmergencyPage();
+        setupEmergencyForm();
+        setupDashboard();
+    });
+}
 
 
 /* =========================================================

@@ -46,8 +46,13 @@ function resourceFor(path) {
 }
 
 async function handler(req, res) {
-    const url = new URL(req.url, "http://localhost");
-    const path = url.pathname.replace(/^\/api/, "") || "/";
+    const requestUrl = typeof req.url === "string" ? req.url : "/api/health";
+    const url = new URL(requestUrl, "http://localhost");
+    let path = url.pathname.replace(/^\/api/, "") || "/";
+
+    if (path === "/index.js") {
+        path = "/";
+    }
 
     if (req.method === "OPTIONS") {
         res.statusCode = 204;
@@ -110,3 +115,4 @@ async function handler(req, res) {
 }
 
 module.exports = handler;
+module.exports.default = handler;
