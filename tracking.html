@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>EADS | Live Ambulance Tracking</title>
+
+
+    <style>
+
+        /* =====================================================
+           EADS LIVE TRACKING
+           CLEAN STANDALONE PAGE
+           ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f6f9;
+
+            color: #111827;
+        }
+
+
+        /* =====================================================
+           MAIN APPLICATION
+           ===================================================== */
+
+        .app {
+            min-height: 100vh;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+           ===================================================== */
+
+        .sidebar {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 322px;
+            height: 100vh;
+
+            background: #111827;
+
+            color: white;
+
+            z-index: 1000;
+        }
+
+
+        .brand {
+            height: 102px;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 20px 24px;
+
+            border-bottom:
+                1px solid #263142;
+        }
+
+
+        .brand-logo {
+            width: 52px;
+            height: 52px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background: #e52525;
+
+            border-radius: 10px;
+
+            font-size: 25px;
+            font-weight: 700;
+
+            margin-right: 14px;
+        }
+
+
+        .brand h2 {
+            margin: 0;
+
+            font-size: 21px;
+        }
+
+
+        .brand p {
+            margin: 5px 0 0;
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+           ===================================================== */
+
+        .sidebar-nav {
+            padding: 30px 14px;
+        }
+
+
+        .nav-title {
+            margin:
+
+                12px 12px 12px;
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+        }
+
+
+        .nav-item {
+            display: flex;
+
+            align-items: center;
+
+            width: 100%;
+            height: 52px;
+
+            padding: 0 17px;
+
+            margin-bottom: 4px;
+
+            color: #e2e8f0;
+
+            text-decoration: none;
+
+            border-radius: 9px;
+
+            font-size: 15px;
+        }
+
+
+        .nav-item:hover {
+            background: #1f2937;
+        }
+
+
+        .nav-item.active {
+            background: #e52525;
+
+            color: white;
+
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT
+           ===================================================== */
+
+        .main {
+            margin-left: 322px;
+
+            min-height: 100vh;
+
+            width: calc(100% - 322px);
+        }
+
+
+        /* =====================================================
+           TOPBAR
+           ===================================================== */
+
+        .topbar {
+            height: 78px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: flex-end;
+
+            gap: 25px;
+
+            padding: 0 32px;
+
+            background: white;
+
+            border-bottom:
+                1px solid #e5e7eb;
+        }
+
+
+        .system-status {
+            padding: 9px 15px;
+
+            border:
+                1px solid #a7f3d0;
+
+            border-radius: 20px;
+
+            background: #ecfdf5;
+
+            color: #047857;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        .notification {
+            height: 40px;
+
+            padding: 0 16px;
+
+            background: white;
+
+            border:
+                1px solid #dbe1e8;
+
+            border-radius: 7px;
+
+            color: #334155;
+
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+
+        .notification:hover {
+            background: #f8fafc;
+        }
+
+
+        .user {
+            display: flex;
+
+            flex-direction: column;
+
+            font-size: 13px;
+        }
+
+
+        .user strong {
+            color: #111827;
+        }
+
+
+        .user span {
+            margin-top: 3px;
+
+            color: #64748b;
+        }
+
+
+        /* =====================================================
+           CONTENT
+           ===================================================== */
+
+        .content {
+            padding: 32px;
+        }
+
+
+        /* =====================================================
+           PAGE HEADER
+           ===================================================== */
+
+        .page-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 28px;
+        }
+
+
+        .page-header h1 {
+            margin: 0;
+
+            font-size: 30px;
+
+            font-weight: 700;
+
+            color: #111827;
+        }
+
+
+        .page-header p {
+            margin: 7px 0 0;
+
+            color: #64748b;
+
+            font-size: 15px;
+        }
+
+
+        /* =====================================================
+           REFRESH BUTTON
+           ===================================================== */
+
+        .refresh-button {
+            height: 42px;
+
+            padding: 0 18px;
+
+            background: white;
+
+            border:
+                1px solid #cbd5e1;
+
+            border-radius: 7px;
+
+            color: #334155;
+
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+
+        .refresh-button:hover {
+            background: #f8fafc;
+        }
+
+
+        /* =====================================================
+           STATISTICS
+           ===================================================== */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .stat-card {
+            min-height: 145px;
+
+            padding: 24px;
+
+            background: white;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 11px;
+
+            box-shadow:
+                0 2px 6px
+                rgba(15, 23, 42, 0.04);
+        }
+
+
+        .stat-label {
+            color: #64748b;
+
+            font-size: 14px;
+
+            margin-bottom: 13px;
+        }
+
+
+        .stat-number {
+            color: #111827;
+
+            font-size: 34px;
+
+            font-weight: 700;
+        }
+
+
+        .stat-description {
+            margin-top: 12px;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           GRID
+           ===================================================== */
+
+        .tracking-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 2fr)
+                minmax(300px, 1fr);
+
+            gap: 20px;
+        }
+
+
+        /* =====================================================
+           PANELS
+           ===================================================== */
+
+        .panel {
+            background: white;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 11px;
+
+            box-shadow:
+                0 2px 6px
+                rgba(15, 23, 42, 0.04);
+
+            overflow: hidden;
+        }
+
+
+        .panel-header {
+            min-height: 86px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 20px 25px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+        }
+
+
+        .panel-header h2 {
+            margin: 0;
+
+            font-size: 20px;
+
+            color: #111827;
+        }
+
+
+        .panel-header p {
+            margin: 6px 0 0;
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           MAP
+           ===================================================== */
+
+        .map-section {
+            padding: 25px;
+        }
+
+
+        .map {
+            position: relative;
+
+            height: 460px;
+
+            overflow: hidden;
+
+            background: #eef2f7;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius: 9px;
+        }
+
+
+        /* MAP GRID */
+
+        .map::before {
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background-image:
+
+                linear-gradient(
+                    30deg,
+                    transparent 48%,
+                    #d4dae2 49%,
+                    #d4dae2 51%,
+                    transparent 52%
+                ),
+
+                linear-gradient(
+                    -20deg,
+                    transparent 48%,
+                    #d4dae2 49%,
+                    #d4dae2 51%,
+                    transparent 52%
+                );
+
+            background-size:
+                190px 150px,
+                220px 180px;
+
+            opacity: 0.75;
+        }
+
+
+        /* MAIN ROADS */
+
+        .road {
+            position: absolute;
+
+            background: white;
+
+            border:
+                1px solid #cbd5e1;
+
+            z-index: 1;
+        }
+
+
+        .road.horizontal {
+            left: -5%;
+
+            top: 55%;
+
+            width: 110%;
+
+            height: 44px;
+
+            transform:
+                rotate(-8deg);
+        }
+
+
+        .road.diagonal {
+            left: 35%;
+
+            top: -20%;
+
+            width: 45px;
+
+            height: 150%;
+
+            transform:
+                rotate(-30deg);
+        }
+
+
+        .road.vertical {
+            left: 72%;
+
+            top: -10%;
+
+            width: 35px;
+
+            height: 130%;
+
+            transform:
+                rotate(12deg);
+        }
+
+
+        /* =====================================================
+           MAP TITLE
+           ===================================================== */
+
+        .map-label {
+            position: absolute;
+
+            top: 20px;
+            left: 20px;
+
+            z-index: 5;
+
+            padding: 10px 13px;
+
+            background: rgba(
+                255,
+                255,
+                255,
+                0.95
+            );
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius: 6px;
+
+            color: #334155;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           AMBULANCE MARKERS
+           ===================================================== */
+
+        .marker {
+            position: absolute;
+
+            z-index: 10;
+
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background: #e52525;
+
+            color: white;
+
+            border:
+                3px solid white;
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 3px 10px
+                rgba(0, 0, 0, 0.25);
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .marker.a1 {
+            left: 27%;
+            top: 34%;
+        }
+
+
+        .marker.a2 {
+            left: 55%;
+            top: 65%;
+        }
+
+
+        .marker.a3 {
+            left: 76%;
+            top: 30%;
+        }
+
+
+        .marker.a4 {
+            left: 64%;
+            top: 48%;
+        }
+
+
+        /* =====================================================
+           MAP LEGEND
+           ===================================================== */
+
+        .legend {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 22px;
+
+            margin-top: 16px;
+
+            color: #64748b;
+
+            font-size: 12px;
+        }
+
+
+        .legend-item {
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+        }
+
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+
+            border-radius: 50%;
+        }
+
+
+        .dot-red {
+            background: #e52525;
+        }
+
+
+        .dot-green {
+            background: #16a34a;
+        }
+
+
+        .dot-blue {
+            background: #2563eb;
+        }
+
+
+        .dot-orange {
+            background: #ea580c;
+        }
+
+
+        /* =====================================================
+           VEHICLE LIST
+           ===================================================== */
+
+        .vehicle-list {
+            padding: 20px;
+        }
+
+
+        .vehicle-card {
+            padding: 16px;
+
+            margin-bottom: 12px;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 8px;
+
+            background: white;
+        }
+
+
+        .vehicle-card:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .vehicle-top {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+        }
+
+
+        .vehicle-name {
+            color: #111827;
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+
+        .vehicle-status {
+            padding: 5px 9px;
+
+            border-radius: 15px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        .status-enroute {
+            background: #dbeafe;
+
+            color: #1d4ed8;
+        }
+
+
+        .status-scene {
+            background: #ffedd5;
+
+            color: #c2410c;
+        }
+
+
+        .status-available {
+            background: #dcfce7;
+
+            color: #15803d;
+        }
+
+
+        .vehicle-info {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 9px;
+
+            padding-top: 10px;
+
+            border-top:
+                1px solid #edf1f5;
+        }
+
+
+        .vehicle-info span {
+            color: #64748b;
+
+            font-size: 11px;
+        }
+
+
+        .vehicle-info strong {
+            display: block;
+
+            margin-top: 3px;
+
+            color: #334155;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           FOOTER INFORMATION
+           ===================================================== */
+
+        .tracking-info {
+            margin-top: 20px;
+
+            padding: 16px 20px;
+
+            background: #f8fafc;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 8px;
+
+            color: #64748b;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 1050px) {
+
+            .tracking-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+
+            .main {
+                margin-left: 220px;
+
+                width:
+                    calc(100% - 220px);
+            }
+
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+            }
+
+
+            .main {
+                margin-left: 0;
+
+                width: 100%;
+            }
+
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+
+            .content {
+                padding: 20px;
+            }
+
+
+            .page-header {
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+
+            .map {
+                height: 350px;
+            }
+
+        }
+
+    </style>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="brand">
+
+
+            <div class="brand-logo">
+                E
+            </div>
+
+
+            <div>
+
+                <h2>EADS</h2>
+
+                <p>
+                    Emergency Dispatch
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+
+            <div class="nav-title">
+                MAIN MENU
+            </div>
+
+
+            <a
+                href="index.html"
+                class="nav-item"
+            >
+                Dashboard
+            </a>
+
+
+            <a
+                href="emergency.html"
+                class="nav-item"
+            >
+                Emergencies
+            </a>
+
+
+            <a
+                href="ambulance.html"
+                class="nav-item"
+            >
+                Ambulances
+            </a>
+
+
+            <a
+                href="tracking.html"
+                class="nav-item active"
+            >
+                Live Tracking
+            </a>
+
+
+            <div class="nav-title">
+                MANAGEMENT
+            </div>
+
+
+            <a
+                href="hospitals.html"
+                class="nav-item"
+            >
+                Hospitals
+            </a>
+
+
+            <a
+                href="reports.html"
+                class="nav-item"
+            >
+                Reports
+            </a>
+
+
+            <a
+                href="users.html"
+                class="nav-item"
+            >
+                Users
+            </a>
+
+
+            <a
+                href="settings.html"
+                class="nav-item"
+            >
+                Settings
+            </a>
+
+
+        </nav>
+
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+
+            <div>
+                <h1>Live Ambulance Tracking</h1>
+                <p>Monitor active ambulances and response routes</p>
+            </div>
+
+            <div class="top-right">
+                <span class="system-status">System Operational</span>
+                <button class="notification" id="notificationButton">Notifications</button>
+                <div class="user">
+                    <strong>Arpan Das</strong>
+                    <span>Dispatcher</span>
+                </div>
+            </div>
+
+
+        </header>
+
+
+        <!-- =================================================
+             CONTENT
+             ================================================= -->
+
+        <section class="content">
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="page-header">
+
+
+                <button
+                    class="refresh-button"
+                    id="refreshButton"
+                >
+                    Refresh Tracking
+                </button>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 STATISTICS
+                 ================================================= -->
+
+            <div class="stats">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        Active Ambulances
+                    </div>
+
+                    <div
+                        class="stat-number"
+                        id="activeCount"
+                    >
+                        08
+                    </div>
+
+                    <div class="stat-description">
+                        Currently deployed
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        En Route
+                    </div>
+
+                    <div
+                        class="stat-number"
+                        id="enRouteCount"
+                    >
+                        04
+                    </div>
+
+                    <div class="stat-description">
+                        Moving to incidents
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-label">
+                        On Scene
+                    </div>
+
+                    <div
+                        class="stat-number"
+                        id="sceneCount"
+                    >
+                        02
+                    </div>
+
+                    <div class="stat-description">
+                        At emergency locations
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 TRACKING GRID
+                 ================================================= -->
+
+            <div class="tracking-grid">
+
+
+                <!-- MAP -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+
+                        <div>
+
+                            <h2>
+                                Live Location Map
+                            </h2>
+
+                            <p>
+                                Real-time ambulance positions
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="map-section">
+
+
+                        <div class="map">
+
+
+                            <div class="road horizontal"></div>
+
+                            <div class="road diagonal"></div>
+
+                            <div class="road vertical"></div>
+
+
+                            <div class="map-label">
+                                EADS Dispatch Area
+                            </div>
+
+
+                            <div class="marker a1">
+                                A1
+                            </div>
+
+
+                            <div class="marker a2">
+                                A2
+                            </div>
+
+
+                            <div class="marker a3">
+                                A3
+                            </div>
+
+
+                            <div class="marker a4">
+                                A4
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="legend">
+
+
+                            <div class="legend-item">
+
+                                <span
+                                    class="legend-dot dot-red"
+                                ></span>
+
+                                Active Ambulance
+
+                            </div>
+
+
+                            <div class="legend-item">
+
+                                <span
+                                    class="legend-dot dot-green"
+                                ></span>
+
+                                Available
+
+                            </div>
+
+
+                            <div class="legend-item">
+
+                                <span
+                                    class="legend-dot dot-blue"
+                                ></span>
+
+                                En Route
+
+                            </div>
+
+
+                            <div class="legend-item">
+
+                                <span
+                                    class="legend-dot dot-orange"
+                                ></span>
+
+                                On Scene
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- VEHICLES -->
+
+                <div class="panel">
+
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h2>
+                                Active Ambulances
+                            </h2>
+
+                            <p>
+                                Current deployment status
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="vehicle-list">
+
+
+                        <!-- VEHICLE 1 -->
+
+                        <div class="vehicle-card">
+
+
+                            <div class="vehicle-top">
+
+
+                                <div class="vehicle-name">
+                                    AMB-101
+                                </div>
+
+
+                                <span
+                                    class="
+                                    vehicle-status
+                                    status-enroute
+                                    "
+                                >
+                                    EN ROUTE
+                                </span>
+
+
+                            </div>
+
+
+                            <div class="vehicle-info">
+
+
+                                <div>
+
+                                    <span>
+                                        Driver
+                                    </span>
+
+                                    <strong>
+                                        R. Sharma
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Emergency
+                                    </span>
+
+                                    <strong>
+                                        E-1042
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Speed
+                                    </span>
+
+                                    <strong>
+                                        46 km/h
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        ETA
+                                    </span>
+
+                                    <strong>
+                                        04 min
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- VEHICLE 2 -->
+
+                        <div class="vehicle-card">
+
+
+                            <div class="vehicle-top">
+
+
+                                <div class="vehicle-name">
+                                    AMB-102
+                                </div>
+
+
+                                <span
+                                    class="
+                                    vehicle-status
+                                    status-scene
+                                    "
+                                >
+                                    ON SCENE
+                                </span>
+
+
+                            </div>
+
+
+                            <div class="vehicle-info">
+
+
+                                <div>
+
+                                    <span>
+                                        Driver
+                                    </span>
+
+                                    <strong>
+                                        A. Kumar
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Emergency
+                                    </span>
+
+                                    <strong>
+                                        E-1041
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Location
+                                    </span>
+
+                                    <strong>
+                                        City Hospital
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Status
+                                    </span>
+
+                                    <strong>
+                                        Treating
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- VEHICLE 3 -->
+
+                        <div class="vehicle-card">
+
+
+                            <div class="vehicle-top">
+
+
+                                <div class="vehicle-name">
+                                    AMB-103
+                                </div>
+
+
+                                <span
+                                    class="
+                                    vehicle-status
+                                    status-available
+                                    "
+                                >
+                                    AVAILABLE
+                                </span>
+
+
+                            </div>
+
+
+                            <div class="vehicle-info">
+
+
+                                <div>
+
+                                    <span>
+                                        Driver
+                                    </span>
+
+                                    <strong>
+                                        S. Das
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Base
+                                    </span>
+
+                                    <strong>
+                                        Central Station
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Equipment
+                                    </span>
+
+                                    <strong>
+                                        Full
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Status
+                                    </span>
+
+                                    <strong>
+                                        Ready
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- VEHICLE 4 -->
+
+                        <div class="vehicle-card">
+
+
+                            <div class="vehicle-top">
+
+
+                                <div class="vehicle-name">
+                                    AMB-104
+                                </div>
+
+
+                                <span
+                                    class="
+                                    vehicle-status
+                                    status-enroute
+                                    "
+                                >
+                                    EN ROUTE
+                                </span>
+
+
+                            </div>
+
+
+                            <div class="vehicle-info">
+
+
+                                <div>
+
+                                    <span>
+                                        Driver
+                                    </span>
+
+                                    <strong>
+                                        M. Singh
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Emergency
+                                    </span>
+
+                                    <strong>
+                                        E-1040
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Speed
+                                    </span>
+
+                                    <strong>
+                                        39 km/h
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        ETA
+                                    </span>
+
+                                    <strong>
+                                        07 min
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="tracking-info">
+
+                Last tracking update:
+                <strong id="lastUpdate">
+                    Just now
+                </strong>
+
+                &nbsp; | &nbsp;
+
+                Tracking system:
+                <strong>
+                    Operational
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+<script>
+
+
+    /* =====================================================
+       TRACKING PAGE JAVASCRIPT
+       ===================================================== */
+
+
+    const refreshButton =
+        document.getElementById(
+            "refreshButton"
+        );
+
+
+    const notificationButton =
+        document.getElementById(
+            "notificationButton"
+        );
+
+
+    refreshButton.addEventListener(
+        "click",
+        function () {
+
+            const now =
+                new Date();
+
+
+            document.getElementById(
+                "lastUpdate"
+            ).textContent =
+                now.toLocaleTimeString();
+
+
+            refreshButton.textContent =
+                "Tracking Updated";
+
+
+            setTimeout(
+                function () {
+
+                    refreshButton.textContent =
+                        "Refresh Tracking";
+
+                },
+                1500
+            );
+
+        }
+    );
+
+
+    notificationButton.addEventListener(
+        "click",
+        function () {
+
+            alert(
+                "No new tracking notifications."
+            );
+
+        }
+    );
+
+
+</script>
+
+
+</body>
+
+</html>

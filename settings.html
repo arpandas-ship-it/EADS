@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EADS | Settings</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-box">E</div>
+            <div>
+                <h2>EADS</h2>
+                <p>Emergency Dispatch</p>
+            </div>
+        </div>
+        <nav>
+            <p class="menu-title">MAIN MENU</p>
+            <a href="index.html" class="nav-item">Dashboard</a>
+            <a href="emergency.html" class="nav-item">Emergencies</a>
+            <a href="ambulance.html" class="nav-item">Ambulances</a>
+            <a href="tracking.html" class="nav-item">Live Tracking</a>
+            <p class="menu-title">MANAGEMENT</p>
+            <a href="hospitals.html" class="nav-item">Hospitals</a>
+            <a href="reports.html" class="nav-item">Reports</a>
+            <a href="users.html" class="nav-item">Users</a>
+            <a href="settings.html" class="nav-item active">Settings</a>
+        </nav>
+        <div class="sidebar-user">
+            <div class="user-avatar">AD</div>
+            <div>
+                <strong>Dispatcher</strong>
+                <small>Arpan Das</small>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <h1>Settings</h1>
+                <p>Configure dispatch system preferences</p>
+            </div>
+            <div class="topbar-right">
+                <span class="system-online">System Operational</span>
+            </div>
+        </header>
+
+        <section class="content">
+            <div class="panel settings-panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Dispatch preferences</h2>
+                        <p>Manage the operational defaults for this dashboard.</p>
+                    </div>
+                </div>
+                <div class="settings-list">
+                    <label class="setting-row">
+                        <span>
+                            <strong>System notifications</strong>
+                            <small>Show alerts for new emergency requests.</small>
+                        </span>
+                        <input type="checkbox" checked>
+                    </label>
+                    <label class="setting-row">
+                        <span>
+                            <strong>Auto-refresh tracking</strong>
+                            <small>Keep ambulance positions updated automatically.</small>
+                        </span>
+                        <input type="checkbox" checked>
+                    </label>
+                    <label class="setting-row">
+                        <span>
+                            <strong>Default response priority</strong>
+                            <small>Priority applied when a new request is created.</small>
+                        </span>
+                        <select>
+                            <option>High</option>
+                            <option>Critical</option>
+                            <option>Medium</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

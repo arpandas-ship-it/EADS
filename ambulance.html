@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EADS | Ambulances</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .ambulance-dialog {
+            position: fixed;
+            inset: 0;
+            z-index: 1100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(15, 23, 42, 0.55);
+        }
+
+        .ambulance-dialog.open {
+            display: flex;
+        }
+
+        .ambulance-form {
+            width: min(560px, 100%);
+            padding: 28px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.22);
+        }
+
+        .ambulance-form-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .ambulance-form h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .close-dialog {
+            padding: 4px 10px;
+            border: 0;
+            background: transparent;
+            color: #64748b;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .ambulance-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .ambulance-form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .ambulance-form-field label {
+            color: #475569;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .ambulance-form-field input,
+        .ambulance-form-field select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #dbe1e8;
+            border-radius: 6px;
+            color: #111827;
+            font: inherit;
+        }
+
+        .ambulance-form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .ambulance-cancel {
+            padding: 0 16px;
+            border: 1px solid #dbe1e8;
+            border-radius: 7px;
+            background: white;
+            color: #475569;
+            cursor: pointer;
+        }
+
+        @media (max-width: 640px) {
+            .ambulance-form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-box">E</div>
+
+            <div>
+                <h2>EADS</h2>
+                <p>Emergency Dispatch</p>
+            </div>
+        </div>
+
+        <nav>
+
+            <p class="menu-title">MAIN MENU</p>
+
+            <a href="index.html" class="nav-item">
+                Dashboard
+            </a>
+
+            <a href="emergency.html" class="nav-item">
+                Emergencies
+            </a>
+
+            <a href="ambulance.html" class="nav-item active">
+                Ambulances
+            </a>
+
+            <a href="tracking.html" class="nav-item">
+                Live Tracking
+            </a>
+
+            <p class="menu-title">MANAGEMENT</p>
+
+            <a href="hospitals.html" class="nav-item">
+                Hospitals
+            </a>
+
+            <a href="reports.html" class="nav-item">
+                Reports
+            </a>
+
+            <a href="users.html" class="nav-item">
+                Users
+            </a>
+
+            <a href="settings.html" class="nav-item">
+                Settings
+            </a>
+
+        </nav>
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar">
+                AD
+            </div>
+
+            <div>
+                <strong>Dispatcher</strong>
+                <small>Arpan Das</small>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Ambulance Management</h1>
+
+                <p>
+                    Monitor and manage ambulance fleet
+                </p>
+
+            </div>
+
+            <div class="topbar-right">
+
+                <span class="system-online">
+                    System Operational
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- STATISTICS -->
+
+        <section class="statistics">
+
+            <div class="stat-card">
+
+                <p>Total Ambulances</p>
+
+                <h2>22</h2>
+
+                <span>
+                    Registered fleet
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>Available</p>
+
+                <h2>14</h2>
+
+                <span class="positive">
+                    Ready for dispatch
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>En Route</p>
+
+                <h2>04</h2>
+
+                <span>
+                    Currently responding
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>Maintenance</p>
+
+                <h2>02</h2>
+
+                <span class="negative">
+                    Not available
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- AMBULANCE PANEL -->
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>Ambulance Fleet</h2>
+
+                    <p>
+                        Current ambulance status and assignments
+                    </p>
+
+                </div>
+
+                <button type="button" class="primary-button" id="addAmbulanceButton">
+                    Add Ambulance
+                </button>
+
+            </div>
+
+
+            <!-- FILTERS -->
+
+            <div class="filters">
+
+                <input
+                    type="text"
+                    placeholder="Search ambulance, driver or location"
+                >
+
+                <select>
+
+                    <option>
+                        All Status
+                    </option>
+
+                    <option>
+                        Available
+                    </option>
+
+                    <option>
+                        En Route
+                    </option>
+
+                    <option>
+                        On Scene
+                    </option>
+
+                    <option>
+                        Transporting
+                    </option>
+
+                    <option>
+                        Maintenance
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- TABLE -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Ambulance ID</th>
+                            <th>Driver</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Current Emergency</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="ambulanceTableBody">
+
+
+                        <tr>
+
+                            <td>
+                                WB-73A-1024
+                            </td>
+
+                            <td>
+                                Rahul Sharma
+                            </td>
+
+                            <td>
+                                Sevoke Road
+                            </td>
+
+                            <td>
+                                Advanced Life Support
+                            </td>
+
+                            <td>
+
+                                <span class="status available-status">
+                                    Available
+                                </span>
+
+                            </td>
+
+                            <td>
+                                None
+                            </td>
+
+                            <td>
+
+                                <button class="table-button">
+                                    Dispatch
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                WB-73A-1008
+                            </td>
+
+                            <td>
+                                Amit Roy
+                            </td>
+
+                            <td>
+                                Hill Cart Road
+                            </td>
+
+                            <td>
+                                Basic Life Support
+                            </td>
+
+                            <td>
+
+                                <span class="status enroute">
+                                    En Route
+                                </span>
+
+                            </td>
+
+                            <td>
+                                #E-1041
+                            </td>
+
+                            <td>
+
+                                <button class="table-button">
+                                    Track
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                WB-73A-1016
+                            </td>
+
+                            <td>
+                                Suman Das
+                            </td>
+
+                            <td>
+                                Matigara
+                            </td>
+
+                            <td>
+                                Advanced Life Support
+                            </td>
+
+                            <td>
+
+                                <span class="status transporting">
+                                    Transporting
+                                </span>
+
+                            </td>
+
+                            <td>
+                                #E-1039
+                            </td>
+
+                            <td>
+
+                                <button class="table-button">
+                                    Track
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                WB-73A-1020
+                            </td>
+
+                            <td>
+                                Rakesh Singh
+                            </td>
+
+                            <td>
+                                Pradhan Nagar
+                            </td>
+
+                            <td>
+                                Basic Life Support
+                            </td>
+
+                            <td>
+
+                                <span class="status scene">
+                                    On Scene
+                                </span>
+
+                            </td>
+
+                            <td>
+                                #E-1038
+                            </td>
+
+                            <td>
+
+                                <button class="table-button">
+                                    Track
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                WB-73A-1012
+                            </td>
+
+                            <td>
+                                Manoj Kumar
+                            </td>
+
+                            <td>
+                                Fleet Station
+                            </td>
+
+                            <td>
+                                Basic Life Support
+                            </td>
+
+                            <td>
+
+                                <span class="status maintenance">
+                                    Maintenance
+                                </span>
+
+                            </td>
+
+                            <td>
+                                None
+                            </td>
+
+                            <td>
+
+                                <button class="table-button">
+                                    View
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- BOTTOM INFORMATION -->
+
+        <section class="bottom-grid">
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h2>Fleet Distribution</h2>
+
+                        <p>
+                            Current ambulance availability
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="fleet-list">
+
+                    <div>
+
+                        <span class="dot available"></span>
+
+                        Available
+
+                        <strong>14</strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="dot blue"></span>
+
+                        En Route
+
+                        <strong>4</strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="dot orange"></span>
+
+                        On Scene
+
+                        <strong>2</strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="dot gray"></span>
+
+                        Maintenance
+
+                        <strong>2</strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h2>Dispatch Information</h2>
+
+                        <p>
+                            Ambulance assignment process
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="quick-actions">
+
+                    <a href="emergency.html">
+
+                        <strong>
+                            View Emergencies
+                        </strong>
+
+                        <small>
+                            Check pending emergency requests
+                        </small>
+
+                    </a>
+
+
+                    <a href="tracking.html">
+
+                        <strong>
+                            Live Tracking
+                        </strong>
+
+                        <small>
+                            Monitor ambulance locations
+                        </small>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<div class="ambulance-dialog" id="ambulanceDialog" role="dialog" aria-modal="true" aria-labelledby="ambulanceDialogTitle">
+    <form class="ambulance-form" id="ambulanceForm">
+        <div class="ambulance-form-header">
+            <h2 id="ambulanceDialogTitle">Add Ambulance</h2>
+            <button type="button" class="close-dialog" id="closeAmbulanceDialog" aria-label="Close">&times;</button>
+        </div>
+
+        <div class="ambulance-form-grid">
+            <div class="ambulance-form-field">
+                <label for="ambulanceId">Ambulance ID *</label>
+                <input id="ambulanceId" required>
+            </div>
+            <div class="ambulance-form-field">
+                <label for="ambulanceDriver">Driver *</label>
+                <input id="ambulanceDriver" required>
+            </div>
+            <div class="ambulance-form-field">
+                <label for="ambulanceLocation">Location *</label>
+                <input id="ambulanceLocation" required>
+            </div>
+            <div class="ambulance-form-field">
+                <label for="ambulanceType">Type *</label>
+                <select id="ambulanceType" required>
+                    <option value="Advanced Life Support">Advanced Life Support</option>
+                    <option value="Basic Life Support">Basic Life Support</option>
+                </select>
+            </div>
+            <div class="ambulance-form-field">
+                <label for="ambulanceStatus">Status *</label>
+                <select id="ambulanceStatus" required>
+                    <option value="Available">Available</option>
+                    <option value="Maintenance">Maintenance</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="ambulance-form-actions">
+            <button type="button" class="ambulance-cancel" id="cancelAmbulance">Cancel</button>
+            <button type="submit" class="primary-button">Add Ambulance</button>
+        </div>
+    </form>
+</div>
+
+
+<script src="app.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dialog = document.getElementById("ambulanceDialog");
+        const form = document.getElementById("ambulanceForm");
+        const openButton = document.getElementById("addAmbulanceButton");
+        const closeButton = document.getElementById("closeAmbulanceDialog");
+        const cancelButton = document.getElementById("cancelAmbulance");
+        const tableBody = document.getElementById("ambulanceTableBody");
+        const storageKey = "eadsAmbulances";
+
+        function readAmbulances() {
+            try {
+                return JSON.parse(localStorage.getItem(storageKey)) || [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function closeDialog() {
+            dialog.classList.remove("open");
+            form.reset();
+        }
+
+        function addAmbulanceRow(ambulance) {
+            const row = document.createElement("tr");
+            const statusClass = ambulance.status.toLowerCase().replace(/\s+/g, "-");
+            row.innerHTML = `
+                <td>${escapeAmbulanceValue(ambulance.id)}</td>
+                <td>${escapeAmbulanceValue(ambulance.driver)}</td>
+                <td>${escapeAmbulanceValue(ambulance.location)}</td>
+                <td>${escapeAmbulanceValue(ambulance.type)}</td>
+                <td><span class="status ${statusClass}">${escapeAmbulanceValue(ambulance.status)}</span></td>
+                <td>None</td>
+                <td><button type="button" class="table-button">View</button></td>
+            `;
+            tableBody.prepend(row);
+        }
+
+        function escapeAmbulanceValue(value) {
+            return String(value).replace(/[&<>"']/g, function (character) {
+                return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[character];
+            });
+        }
+
+        openButton.addEventListener("click", function () {
+            dialog.classList.add("open");
+            document.getElementById("ambulanceId").focus();
+        });
+
+        closeButton.addEventListener("click", closeDialog);
+        cancelButton.addEventListener("click", closeDialog);
+        dialog.addEventListener("click", function (event) {
+            if (event.target === dialog) closeDialog();
+        });
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const ambulance = {
+                id: document.getElementById("ambulanceId").value.trim(),
+                driver: document.getElementById("ambulanceDriver").value.trim(),
+                location: document.getElementById("ambulanceLocation").value.trim(),
+                type: document.getElementById("ambulanceType").value,
+                status: document.getElementById("ambulanceStatus").value
+            };
+            const ambulances = readAmbulances();
+            ambulances.unshift(ambulance);
+            localStorage.setItem(storageKey, JSON.stringify(ambulances));
+            addAmbulanceRow(ambulance);
+            closeDialog();
+            alert("Ambulance added successfully.");
+        });
+    });
+</script>
+
+</body>
+
+</html>
+
