@@ -1,0 +1,13 @@
+{
+  "name": "eads",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Emergency Ambulance Dispatch System",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check api/index.js && node --check server.js"
+  }
+}
